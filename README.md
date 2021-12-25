@@ -21,6 +21,7 @@ them within a `mydwm` branch. This later one also contains my personalized confi
 * [statusallmons](https://dwm.suckless.org/patches/statusallmons/dwm-statusallmons-6.2.diff) -> statusbar on all monitors
 * [alpha](https://dwm.suckless.org/patches/alpha/dwm-alpha-20201019-61bb8b2.diff) -> Transparency in bar
 * [setstatus](https://dwm.suckless.org/patches/setstatus/dwm-setstatus-6.2.diff) -> simpler syntax for setting the status bar
+* [hide_vacant_tags](https://dwm.suckless.org/patches/hide_vacant_tags/dwm-hide_vacant_tags-6.2.diff) -> show only tags with some client on them (not 1 2 3...9 all the time)
 
 # Manually patching
 Some(often)times a patch fails to be applicable straigth away. I had the issue with vanity following the deck version of cfacts e.g..
@@ -39,6 +40,17 @@ I use this as for my quick research, this was the only one really using separate
 As opposed to Luke Smith's build, I will now keep the modules within `./dwmblocks/blocks.def` but making use of Lukes build, and adding the functions as patches
 ### Install note
 - Make sure to properly patch dwm for the update to work!
+
+### pacpackages
+The pacpackages needs something like a chron job to run `pacman -Sy` every now an then. I used the native are `systemd timers`.
+From within the `dwmblocks/blocks.def` directory do:
+```
+cp pacpackages.service /etc/systemd/system
+cp pacpackages.timer /etc/systemd/system
+systemd enable pacpackages.timer
+systemd start pacpackages.timer
+
+```
 
 
 # TODO
