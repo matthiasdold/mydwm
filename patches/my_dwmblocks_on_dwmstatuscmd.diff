@@ -1,0 +1,143 @@
+diff -ruN dwm-6.2-ori/dwm.c dwm-6.2/dwm.c
+--- dwm-6.2-ori/dwm.c	2019-02-02 18:25:28.000000000 +0530
++++ dwm-6.2/dwm.c	2021-08-03 19:15:58.734660076 +0530
+@@ -40,6 +40,7 @@
+ #include <X11/extensions/Xinerama.h>
+ #endif /* XINERAMA */
+ #include <X11/Xft/Xft.h>
++#include <fcntl.h>
+ 
+ #include "drw.h"
+ #include "util.h"
+@@ -56,10 +57,16 @@
+ #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
+ #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+ #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
++#define TTEXTW(X)               (drw_fontset_getwidth(drw, (X)))
++
++#define STATUSLENGTH            256
++#define DWMBLOCKSLOCKFILE       "/var/local/dwmblocks/dwmblocks.pid"
++#define DELIMITERENDCHAR        10
++#define LSPAD                   (lrpad / 2) /* padding on left side of status text */
++#define RSPAD                   (lrpad / 2) /* padding on right side of status text */
+ 
+ /* enums */
+-enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+-enum { SchemeNorm, SchemeSel }; /* color schemes */
++enum { CurNormal, CurHand, CurResize, CurMove, CurLast }; /* cursor */
+ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
+        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
+@@ -124,6 +131,7 @@
+ 	unsigned int tagset[2];
+ 	int showbar;
+ 	int topbar;
++        int statushandcursor;
+ 	Client *clients;
+ 	Client *sel;
+ 	Client *stack;
+@@ -205,6 +213,7 @@
+ static void seturgent(Client *c, int urg);
+ static void showhide(Client *c);
+ static void sigchld(int unused);
++static void sigdwmblocks(const Arg *arg);
+ static void spawn(const Arg *arg);
+ static void tag(const Arg *arg);
+ static void tagmon(const Arg *arg);
+@@ -219,6 +228,7 @@
+ static void updatebarpos(Monitor *m);
+ static void updatebars(void);
+ static void updateclientlist(void);
++static void updatedwmblockssig(int x);
+ static int updategeom(void);
+ static void updatenumlockmask(void);
+ static void updatesizehints(Client *c);
+@@ -1637,6 +1691,37 @@
+ }
+ 
+ void
++sigdwmblocks(const Arg *arg)
++{
++        static int fd = -1;
++        struct flock fl;
++        union sigval sv;
++
++        if (!dwmblockssig)
++                return;
++        fl.l_type = F_WRLCK;
++        fl.l_whence = SEEK_SET;
++        fl.l_start = 0;
++        fl.l_len = 0;
++        if (fd != -1) {
++                if (fcntl(fd, F_GETLK, &fl) != -1 && fl.l_type == F_WRLCK)
++                        goto signal;
++                close(fd);
++                fl.l_type = F_WRLCK;
++        }
++        if ((fd = open(DWMBLOCKSLOCKFILE, O_RDONLY | O_CLOEXEC)) == -1)
++                return;
++        if (fcntl(fd, F_GETLK, &fl) == -1 || fl.l_type != F_WRLCK) {
++                close(fd);
++                fd = -1;
++                return;
++        }
++signal:
++        sv.sival_int = (dwmblockssig << 8) | arg->i;
++        sigqueue(fl.l_pid, SIGRTMIN, sv);
++}
++
++void
+ spawn(const Arg *arg)
+ {
+ 	if (arg->v == dmenucmd)
+@@ -1805,7 +1890,7 @@
+ 	XSetWindowAttributes wa = {
+ 		.override_redirect = True,
+ 		.background_pixmap = ParentRelative,
+-		.event_mask = ButtonPressMask|ExposureMask
++		.event_mask = ButtonPressMask|ExposureMask|PointerMotionMask
+ 	};
+ 	XClassHint ch = {"dwm", "dwm"};
+ 	for (m = mons; m; m = m->next) {
+@@ -1847,6 +1932,41 @@
+ 				(unsigned char *) &(c->win), 1);
+ }
+ 
++void
++updatedwmblockssig(int x)
++{
++        char *sts = stexts;
++        char *stp = stexts;
++        char tmp;
++
++        while (*sts != '\0') {
++                if ((unsigned char)*sts >= ' ') {
++                        sts++;
++                        continue;
++                }
++                tmp = *sts;
++                *sts = '\0';
++                x += TTEXTW(stp);
++                *sts = tmp;
++                if (x > 0) {
++                        if (tmp == DELIMITERENDCHAR)
++                                break;
++                        if (!selmon->statushandcursor) {
++                                selmon->statushandcursor = 1;
++                                XDefineCursor(dpy, selmon->barwin, cursor[CurHand]->cursor);
++                        }
++                        dwmblockssig = tmp;
++                        return;
++                }
++                stp = ++sts;
++        }
++        if (selmon->statushandcursor) {
++                selmon->statushandcursor = 0;
++                XDefineCursor(dpy, selmon->barwin, cursor[CurNormal]->cursor);
++        }
++        dwmblockssig = 0;
++}
++
+ int
+ updategeom(void)
+ {
