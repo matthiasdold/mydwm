@@ -54,5 +54,4 @@ systemd start pacpackages.timer
 
 
 # TODO
-*
 * Clickable statusbar --> something with [this](https://dwm.suckless.org/patches/statuscmd/)
