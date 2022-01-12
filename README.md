@@ -12,7 +12,11 @@ The basic idea is to have a branch for each patch and then merge them together.
 For this reason, I did start a new branch for each of my patches and later merged
 them within a `mydwm` branch. This later one also contains my personalized config for the keys.
 
+# Get dwm
 
+```
+git clone https://git.suckless.org/dwm
+```
 
 # Patches and reasons why
 * [Vanitygaps](https://dwm.suckless.org/patches/vanitygaps/dwm-cfacts-vanitygaps-6.2_combo.diff) -> eye candy for gaps and included cfacts for better resizing
@@ -32,7 +36,11 @@ git diff HEAD^ > my_patch_file.diff
 ````
 
 # dwmblocks
-I use this as for my quick research, this was the only one really using separate refresh cycles for its components. So it seemed to be the best fit
+I use this as for my quick research, it was the only one really using separate refresh cycles for its components. 
+So it seemed to be the best fit - [dwmblocks](https://github.com/ashish-yadav11/dwmblocks)
+```
+git clone git@github.com:ashish-yadav11/dwmblocks.git
+```
 ## Installation
 -> Apply the patch to dwm
 -> Add `dwmblocks &` to the `~/.xinitrc`
@@ -40,6 +48,7 @@ I use this as for my quick research, this was the only one really using separate
 As opposed to Luke Smith's build, I will now keep the modules within `./dwmblocks/blocks.def` but making use of Lukes build, and adding the functions as patches
 ### Install note
 - Make sure to properly patch dwm for the update to work!
+- The individual scripts are part of the patch `my_full_dwmblocks*`...
 
 ### pacpackages
 The pacpackages needs something like a chron job to run `pacman -Sy` every now an then. I used the native are `systemd timers`.
@@ -47,8 +56,8 @@ From within the `dwmblocks/blocks.def` directory do:
 ```
 cp pacpackages.service /etc/systemd/system
 cp pacpackages.timer /etc/systemd/system
-systemd enable pacpackages.timer
-systemd start pacpackages.timer
+systemctl enable pacpackages.timer
+systemctl start pacpackages.timer
 
 ```
 
