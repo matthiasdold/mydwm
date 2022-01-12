@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# Color code with \x0b, \x0c, \x0d, ... etc being the indeces of the colors
+# array from within the config.h of dwm
+# static const char *colors[][3]      = {
+# 	/*               fg         bg         border   */
+# 	[SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
+# 	[SchemeCol1] = { warnfgcolor, normbgcolor, normbordercolor },
+# 	[SchemeCol2] = { critfgcolor, normbgcolor, normbordercolor },
+# 	[SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
+# };
+
+case $BLOCK_BUTTON in
+	1) notify-send "🖥 CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)\\n(100% per core)" ;;
+	2) setsid -f "$TERMINAL" -e htop ;;
+	3) notify-send "🖥 CPU module " "\- Shows CPU temperature.
+- Click to show intensive processes.
+- Middle click to open htop." ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+temp=`sensors | awk '/Core 0/ {print "" $3}'`
+tempval=`printf $temp | sed -rn 's/.*\+([0-9]*).*/\1/p'`
+case 1 in                                   # take the first statement which is true
+    # $((tempval<=70))) printf "$temp \n" ;;
+    # $((tempval<=80))) printf "`tput setaf 3` $temp \n" ;; 
+    # $((tempval<=200))) printf "`tput setaf 1` $temp \n" ;;
+     $((tempval<=85))) printf "\x0b$temp\n" ;;
+     $((tempval<=95))) printf "\x0c$temp\n" ;; 
+     $((tempval<=200))) printf "\x0d$temp\n" ;;
+esac

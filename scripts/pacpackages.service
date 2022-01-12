@@ -1,0 +1,6 @@
+[Unit]
+Description=Updating the pacman index
+
+[Service]
+Type=simple
+ExecStart=pacman -Sy

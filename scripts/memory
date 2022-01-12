@@ -1,0 +1,20 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+	1) notify-send "🧠 Memory hogs" "$(ps axch -o cmd:15,%mem --sort=-%mem | head)" ;;
+	2) setsid -f "$TERMINAL" -e htop ;;
+	3) notify-send "🧠 Memory module" "\- Shows Memory Used/Total.
+- Click to show memory hogs.
+- Middle click to open htop." ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+memstr=`free --mebi | sed -n '2{p;q}' | awk  '{printf "%2.1fGiB/%2.1fGiB\n", ($3 / 1024), ($2 / 1024)}'`
+# sed for cast to numeric
+memval=`free --mebi | sed -n '2{p;q}' | awk '{print ("%2.1f\n", $3 / $2 * 100)}' | sed -rn 's/.*\+([0-9]*).*/\1/p'`
+
+case 1 in                                   # take the first statement which is true
+     $((memval<=70))) printf "\x0b$memstr\n" ;;
+     $((memval<=80))) printf "\x0c\x0b$memstr\n\x0b" ;;
+     $((memval<=90))) printf "\x0d\x0b$memstr\n\x0b" ;;
+esac

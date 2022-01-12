@@ -1,0 +1,9 @@
+[Unit]
+Description=Update the pacman index every 15 min after boot and every day if continuously running
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=1d
+
+[Install]
+WantedBy=timers.target
