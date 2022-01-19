@@ -325,7 +325,7 @@ index 0000000..8109919
 +	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 +esac
 +
-+memstr=`free --mebi | sed -n '2{p;q}' | awk  '{printf "%2.1fGiB/%2.1fGiB\n", ($3 / 1024), ($2 / 1024)}'`
++memstr=`free --mebi | sed -n '2{p;q}' | awk  '{printf "%2.1fG/%2.1fG\n", ($3 / 1024), ($2 / 1024)}'`
 +# sed for cast to numeric
 +memval=`free --mebi | sed -n '2{p;q}' | awk '{print ("%2.1f\n", $3 / $2 * 100)}' | sed -rn 's/.*\+([0-9]*).*/\1/p'`
 +
