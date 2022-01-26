@@ -26,6 +26,7 @@ git clone https://git.suckless.org/dwm
 * [alpha](https://dwm.suckless.org/patches/alpha/dwm-alpha-20201019-61bb8b2.diff) -> Transparency in bar
 * [setstatus](https://dwm.suckless.org/patches/setstatus/dwm-setstatus-6.2.diff) -> simpler syntax for setting the status bar
 * [hide_vacant_tags](https://dwm.suckless.org/patches/hide_vacant_tags/dwm-hide_vacant_tags-6.2.diff) -> show only tags with some client on them (not 1 2 3...9 all the time)
+* [scratchpads](https://dwm.suckless.org/patches/scratchpads/dwm-scratchpads-20200414-728d397b.diff) -> Use scratchpad for journaling notes
 
 # Manually patching
 Some(often)times a patch fails to be applicable straigth away. I had the issue with vanity following the deck version of cfacts e.g..
@@ -34,6 +35,8 @@ can be recorded to a `.diff` via
 ````
 git diff HEAD^ > my_patch_file.diff
 ````
+
+## Patch to vanilla
 
 # dwmblocks
 I use this as for my quick research, it was the only one really using separate refresh cycles for its components. 
@@ -60,7 +63,6 @@ systemctl enable pacpackages.timer
 systemctl start pacpackages.timer
 
 ```
-
 
 # TODO
 * Clickable statusbar --> something with [this](https://dwm.suckless.org/patches/statuscmd/)
