@@ -4,6 +4,7 @@ This repo is ment as notes for myself as of how to setup my dwm rice
 ## Base components
 * dwm raw
 * dwm blocks
+* st 
 * patches as specified below
 
 # Git Management
@@ -11,6 +12,15 @@ Follow [this idea](https://dwm.suckless.org/customisation/patches_in_git/)
 The basic idea is to have a branch for each patch and then merge them together.
 For this reason, I did start a new branch for each of my patches and later merged
 them within a `mydwm` branch. This later one also contains my personalized config for the keys.
+
+# St
+Starting with st as this is rather simple
+#### Patches
+
+* [alpha](https://github.com/juliusHuelsmann/st/releases/download/v2/st-focus-20200731-patch_alpha.diff) -> have transparency in the terminal
+* [alpha_focus](https://github.com/juliusHuelsmann/st/releases/download/v2/st-focus-20200731-43a395a.diff) -> different transparency depending on focus 
+* [scrollback](https://st.suckless.org/patches/scrollback/st-scrollback-20210507-4536f46.diff) -> scrolling back in the terminal with SHIFT+PgUp/Down
+* [scrollback_mouse](https://st.suckless.org/patches/scrollback/st-scrollback-mouse-20220127-2c5edf2.diff) -> scrolling in the terminal with the SHIFT+Mousewheel
 
 # Get dwm
 
@@ -63,6 +73,8 @@ systemctl enable pacpackages.timer
 systemctl start pacpackages.timer
 
 ```
+
+## 
 
 # TODO
 * Clickable statusbar --> something with [this](https://dwm.suckless.org/patches/statuscmd/)
