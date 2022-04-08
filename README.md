@@ -21,6 +21,7 @@ Starting with st as this is rather simple
 * [alpha_focus](https://github.com/juliusHuelsmann/st/releases/download/v2/st-focus-20200731-43a395a.diff) -> different transparency depending on focus 
 * [scrollback](https://st.suckless.org/patches/scrollback/st-scrollback-20210507-4536f46.diff) -> scrolling back in the terminal with SHIFT+PgUp/Down
 * [scrollback_mouse](https://st.suckless.org/patches/scrollback/st-scrollback-mouse-20220127-2c5edf2.diff) -> scrolling in the terminal with the SHIFT+Mousewheel
+* [font2](https://st.suckless.org/patches/font2/st-font2-20190416-ba72400.diff) -> better rendering for some powerline fonts
 
 # Get dwm
 
