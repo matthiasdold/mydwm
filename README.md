@@ -1,20 +1,26 @@
 # General Idea
 This repo is ment as notes for myself as of how to setup my dwm rice
+![screenshot](./screenshot.png)
 
 ## Base components
-* dwm raw
-* dwm blocks
+* dwm
+* dwmblocks
 * st 
 * patches as specified below
 
 # Git Management
-Follow [this idea](https://dwm.suckless.org/customisation/patches_in_git/)
-The basic idea is to have a branch for each patch and then merge them together.
+Follow [this idea](https://dwm.suckless.org/customisation/patches_in_git/), 
+the basic idea is to have a branch for each patch and then merge them together.
 For this reason, I did start a new branch for each of my patches and later merged
 them within a `mydwm` branch. This later one also contains my personalized config for the keys.
 
 # St
 Starting with st as this is rather simple
+
+```bash
+git clone https://git.suckless.org/st
+```
+
 #### Patches
 
 * [alpha](https://github.com/juliusHuelsmann/st/releases/download/v2/st-focus-20200731-patch_alpha.diff) -> have transparency in the terminal
@@ -22,10 +28,13 @@ Starting with st as this is rather simple
 * [scrollback](https://st.suckless.org/patches/scrollback/st-scrollback-20210507-4536f46.diff) -> scrolling back in the terminal with SHIFT+PgUp/Down
 * [scrollback_mouse](https://st.suckless.org/patches/scrollback/st-scrollback-mouse-20220127-2c5edf2.diff) -> scrolling in the terminal with the SHIFT+Mousewheel
 * [font2](https://st.suckless.org/patches/font2/st-font2-20190416-ba72400.diff) -> better rendering for some powerline fonts
+* [ligatures](https://st.suckless.org/patches/ligatures/) -> nicer font with ligatures
+* [nordtheme](https://st.suckless.org/patches/nordtheme/) -> the basic colorscheme I use
+* [moonfly](https://st.suckless.org/patches/moonfly/) -> potential alternative to nord
 
 # Get dwm
 
-```
+```bash
 git clone https://git.suckless.org/dwm
 ```
 
@@ -43,7 +52,7 @@ git clone https://git.suckless.org/dwm
 Some(often)times a patch fails to be applicable straigth away. I had the issue with vanity following the deck version of cfacts e.g..
 In this case, I did apply the steps manually for the files with error. Later the changes
 can be recorded to a `.diff` via 
-````
+````bash
 git diff HEAD^ > my_patch_file.diff
 ````
 
@@ -52,7 +61,7 @@ git diff HEAD^ > my_patch_file.diff
 # dwmblocks
 I use this as for my quick research, it was the only one really using separate refresh cycles for its components. 
 So it seemed to be the best fit - [dwmblocks](https://github.com/ashish-yadav11/dwmblocks)
-```
+``` bash
 git clone git@github.com:ashish-yadav11/dwmblocks.git
 ```
 ## Installation
