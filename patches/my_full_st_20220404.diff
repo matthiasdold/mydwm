@@ -56,7 +56,7 @@ index da36b34..72f407c 100644
 +void tfulldirt(void);
  void draw(void);
  
- void kscrolldown(const Arg *);
+ void printscreen(const Arg *);
 @@ -127,4 +128,5 @@ extern char *termname;
  extern unsigned int tabspaces;
  extern unsigned int defaultfg;
